@@ -75,8 +75,12 @@ void FSM::setLastHeartbeat(uint32_t time) {
 void FSM::start() {
     while (true) {
         update();
+        if (currentState == SystemState::STOPPED) {
+            break; // Exit the loop if the FSM is stopped
+        }
         this_thread::sleep_for(chrono::milliseconds(1000)); // Sleep for 1000 milliseconds
     }
+    update(); // Final update to ensure STOPPED state is processed
 }
 
 void FSM::update() {
